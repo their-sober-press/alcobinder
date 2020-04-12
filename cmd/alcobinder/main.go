@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/alcoano/alcobinder/internal/app/alcobinder"
@@ -14,5 +13,4 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("hello")
 }

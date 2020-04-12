@@ -1,0 +1,6 @@
+github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
+github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
+github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
+github.com/thecodingmachine/gotenberg-go-client/v7 v7.1.0 h1:lQNb3PUKnKOODxoxvZkMjCbX9rh4ofyC3Bvx22rC20U=
+github.com/thecodingmachine/gotenberg-go-client/v7 v7.1.0/go.mod h1:ABZ2YPzV+IMgtj91+DkoB8/y3qezCQvWhKnGxkY2cSs=
