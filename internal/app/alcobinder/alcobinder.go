@@ -34,11 +34,17 @@ func BindMarkdownsToPdf(markdownDirectory string, outputPath string) error {
 	}
 
 	markdownAsset, err := gotenberg.NewDocumentFromString("file.md", concatenatedMarkdown)
+	if err != nil {
+		return err
+	}
 
 	req := gotenberg.NewMarkdownRequest(index)
 	req.Assets(markdownAsset)
 
-	client.Store(req, outputPath)
+	err = client.Store(req, outputPath)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

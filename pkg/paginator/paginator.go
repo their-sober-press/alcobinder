@@ -7,11 +7,17 @@ import (
 	"strings"
 )
 
+//Page is a page
+type Page struct {
+	Text       string
+	PageNumber string
+}
+
 //Paginate returns an array of pages including blank pages, split by PAGE x (where x is a number)
-func Paginate(text string) ([]string, error) {
+func Paginate(text string) ([]Page, error) {
 	scanner := bufio.NewScanner(strings.NewReader(text))
-	page := ""
-	pages := []string{}
+	pages := []Page{}
+	page := Page{}
 	var nextPageNumber int
 
 	for scanner.Scan() {
@@ -21,8 +27,12 @@ func Paginate(text string) ([]string, error) {
 			if err != nil {
 				return nil, err
 			}
+			page.PageNumber = strconv.Itoa(pageNumber)
 			for i := 1; i < pageNumber; i++ {
-				pages = append(pages, "")
+				pages = append(pages, Page{
+					Text:       "",
+					PageNumber: strconv.Itoa(i),
+				})
 			}
 			nextPageNumber = pageNumber + 1
 			break
@@ -39,13 +49,17 @@ func Paginate(text string) ([]string, error) {
 			if pageNumber != nextPageNumber {
 				return nil, fmt.Errorf("PAGE %d missing", nextPageNumber)
 			}
-			pages = append(pages, strings.TrimSpace(page))
-			page = ""
+			page.Text = strings.TrimSpace(page.Text)
+			pages = append(pages, page)
+			page = Page{
+				PageNumber: strconv.Itoa(nextPageNumber),
+			}
 			nextPageNumber++
 		} else {
-			page += (line + "\n")
+			page.Text += (line + "\n")
 		}
 	}
-	pages = append(pages, strings.TrimSpace(page))
+	page.Text = strings.TrimSpace(page.Text)
+	pages = append(pages, page)
 	return pages, nil
 }

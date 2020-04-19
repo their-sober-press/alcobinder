@@ -24,11 +24,11 @@ This is page three.
 `
 
 const missingPagesAtBeginning = `
-PAGE 2
-This is page two.
-
 PAGE 3
 This is page three.
+
+PAGE 4
+This is page four.
 `
 
 const missingMiddlePages = `
@@ -39,9 +39,9 @@ PAGE 3
 This is page three.
 `
 
-var _ = Describe("Paginator", func() {
+var _ = Describe("Paginate", func() {
 	var input string
-	var output []string
+	var output []Page
 	var err error
 
 	JustBeforeEach(func() {
@@ -55,10 +55,20 @@ var _ = Describe("Paginator", func() {
 
 		It("paginates splitting on PAGE x", func() {
 			Expect(err).ToNot(HaveOccurred())
-			Expect(output).To(Equal([]string{
-				"This is page one.",
-				"This is page two.\n\nStill page two.",
-				"This is page three.",
+			Expect(output).To(Equal([]Page{
+				{
+					Text:       "This is page one.",
+					PageNumber: "1",
+				},
+				{
+					Text:       "This is page two.\n\nStill page two.",
+					PageNumber: "2",
+				},
+
+				{
+					Text:       "This is page three.",
+					PageNumber: "3",
+				},
 			}))
 		})
 	})
@@ -70,10 +80,21 @@ var _ = Describe("Paginator", func() {
 
 		It("paginates fills in missing pages", func() {
 			Expect(err).ToNot(HaveOccurred())
-			Expect(output).To(Equal([]string{
-				"",
-				"This is page two.",
-				"This is page three.",
+			Expect(output).To(Equal([]Page{
+				{
+					PageNumber: "1",
+				},
+				{
+					PageNumber: "2",
+				},
+				{
+					PageNumber: "3",
+					Text:       "This is page three.",
+				},
+				{
+					PageNumber: "4",
+					Text:       "This is page four.",
+				},
 			}))
 		})
 	})
