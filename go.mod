@@ -4,6 +4,7 @@ go 1.14
 
 require (
 	github.com/golang/protobuf v1.3.5 // indirect
+	github.com/gomarkdown/markdown v0.0.0-20200316172748-fd1f3374857d
 	github.com/onsi/ginkgo v1.12.0
 	github.com/onsi/gomega v1.9.0
 	github.com/thecodingmachine/gotenberg-go-client/v7 v7.1.0

@@ -39,6 +39,14 @@ PAGE 3
 This is page three.
 `
 
+const withFormatting = `
+PAGE 1
+This is page _one_.
+
+PAGE 2
+This is page **two**.
+`
+
 var _ = Describe("Paginate", func() {
 	var input string
 	var output []Page
@@ -57,16 +65,19 @@ var _ = Describe("Paginate", func() {
 			Expect(err).ToNot(HaveOccurred())
 			Expect(output).To(Equal([]Page{
 				{
-					Text:       "This is page one.",
+					Markdown:   "This is page one.",
+					HTML:       "<p>This is page one.</p>\n",
 					PageNumber: "1",
 				},
 				{
-					Text:       "This is page two.\n\nStill page two.",
+					Markdown:   "This is page two.\n\nStill page two.",
+					HTML:       "<p>This is page two.</p>\n\n<p>Still page two.</p>\n",
 					PageNumber: "2",
 				},
 
 				{
-					Text:       "This is page three.",
+					Markdown:   "This is page three.",
+					HTML:       "<p>This is page three.</p>\n",
 					PageNumber: "3",
 				},
 			}))
@@ -89,11 +100,13 @@ var _ = Describe("Paginate", func() {
 				},
 				{
 					PageNumber: "3",
-					Text:       "This is page three.",
+					Markdown:   "This is page three.",
+					HTML:       "<p>This is page three.</p>\n",
 				},
 				{
 					PageNumber: "4",
-					Text:       "This is page four.",
+					Markdown:   "This is page four.",
+					HTML:       "<p>This is page four.</p>\n",
 				},
 			}))
 		})
@@ -107,6 +120,28 @@ var _ = Describe("Paginate", func() {
 		It("paginates fills in missing pages", func() {
 			Expect(err).To(HaveOccurred())
 			Expect(err).To(MatchError("PAGE 2 missing"))
+		})
+	})
+
+	Context("when pages have formatting", func() {
+		BeforeEach(func() {
+			input = withFormatting
+		})
+
+		It("converts the markdown formatting into HTML", func() {
+			Expect(err).ToNot(HaveOccurred())
+			Expect(output).To(Equal([]Page{
+				{
+					Markdown:   "This is page _one_.",
+					HTML:       "<p>This is page <em>one</em>.</p>\n",
+					PageNumber: "1",
+				},
+				{
+					Markdown:   "This is page **two**.",
+					HTML:       "<p>This is page <strong>two</strong>.</p>\n",
+					PageNumber: "2",
+				},
+			}))
 		})
 	})
 })

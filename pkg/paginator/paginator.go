@@ -5,11 +5,15 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/html"
 )
 
 //Page is a page
 type Page struct {
-	Text       string
+	Markdown   string
+	HTML       string
 	PageNumber string
 }
 
@@ -30,7 +34,7 @@ func Paginate(text string) ([]Page, error) {
 			page.PageNumber = strconv.Itoa(pageNumber)
 			for i := 1; i < pageNumber; i++ {
 				pages = append(pages, Page{
-					Text:       "",
+					Markdown:   "",
 					PageNumber: strconv.Itoa(i),
 				})
 			}
@@ -49,17 +53,27 @@ func Paginate(text string) ([]Page, error) {
 			if pageNumber != nextPageNumber {
 				return nil, fmt.Errorf("PAGE %d missing", nextPageNumber)
 			}
-			page.Text = strings.TrimSpace(page.Text)
+			page.Markdown = strings.TrimSpace(page.Markdown)
+			page.HTML = renderHTML(page.Markdown)
 			pages = append(pages, page)
 			page = Page{
 				PageNumber: strconv.Itoa(nextPageNumber),
 			}
 			nextPageNumber++
 		} else {
-			page.Text += (line + "\n")
+			page.Markdown += (line + "\n")
 		}
 	}
-	page.Text = strings.TrimSpace(page.Text)
+	page.Markdown = strings.TrimSpace(page.Markdown)
+	page.HTML = renderHTML(page.Markdown)
 	pages = append(pages, page)
 	return pages, nil
+}
+
+func renderHTML(md string) string {
+	opts := html.RendererOptions{}
+	renderer := html.NewRenderer(opts)
+
+	html := markdown.ToHTML([]byte(md), nil, renderer)
+	return string(html)
 }
