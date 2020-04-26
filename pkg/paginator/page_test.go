@@ -7,10 +7,10 @@ import (
 	. "github.com/alcoano/alcobinder/pkg/paginator"
 )
 
-pageText := `
+const pageText = `
 **First** line
 
-_second_ line
+_Second_ line
 `
 
 var _ = Describe("Page", func() {
@@ -18,18 +18,18 @@ var _ = Describe("Page", func() {
 	Describe(".NewPageFromMarkdown", func() {
 		var page Page
 		BeforeEach(func() {
-			page = NewPageFromMarkdown(1, pageText)
+			page = NewPageFromMarkdown("1", pageText)
 		})
 
-		It("adds the page number", func(){
+		It("adds the page number", func() {
 			Expect(page.PageNumber).To(Equal("1"))
 		})
 
-		It("adds the markdown", func(){
+		It("adds the markdown", func() {
 			Expect(page.Markdown).To(Equal(pageText))
 		})
 
-		It("adds HTML generated from the markdown", func(){
+		It("adds HTML generated from the markdown", func() {
 			Expect(page.HTML).To(Equal("<p><strong>First</strong> line</p>\n\n<p><em>Second</em> line</p>\n"))
 		})
 	})
