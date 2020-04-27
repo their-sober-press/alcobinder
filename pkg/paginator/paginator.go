@@ -11,7 +11,7 @@ import (
 func Paginate(text string) ([]Page, error) {
 	scanner := bufio.NewScanner(strings.NewReader(text))
 	pages := []Page{}
-	var cursor pageCursor = NewPageCursor()
+	var cursor pageCursor = newPageCursor()
 	var pageText string
 
 	for scanner.Scan() {
@@ -22,8 +22,8 @@ func Paginate(text string) ([]Page, error) {
 				return nil, err
 			}
 			for i := 1; i < pageNumber; i++ {
-				pages = append(pages, NewPageFromMarkdown(cursor.CurrentPage(), ""))
-				cursor.Increment()
+				pages = append(pages, NewPageFromMarkdown(cursor.currentPage(), ""))
+				cursor.increment()
 			}
 			break
 		}
@@ -33,49 +33,48 @@ func Paginate(text string) ([]Page, error) {
 		line := scanner.Text()
 		if strings.HasPrefix(line, "PAGE ") {
 			pageNumber := line[5:]
-			if pageNumber != cursor.NextPage() {
-				return nil, fmt.Errorf("PAGE %s missing", cursor.NextPage())
+			if pageNumber != cursor.nextPage() {
+				return nil, fmt.Errorf("PAGE %s missing", cursor.nextPage())
 			}
 			pageText = strings.TrimSpace(pageText)
-			pages = append(pages, NewPageFromMarkdown(cursor.CurrentPage(), pageText))
+			pages = append(pages, NewPageFromMarkdown(cursor.currentPage(), pageText))
 			pageText = ""
-			cursor.Increment()
+			cursor.increment()
 		} else {
 			pageText += (line + "\n")
 		}
 	}
 	pageText = strings.TrimSpace(pageText)
-	pages = append(pages, NewPageFromMarkdown(cursor.CurrentPage(), pageText))
+	pages = append(pages, NewPageFromMarkdown(cursor.currentPage(), pageText))
 	return pages, nil
 }
 
 type pageCursor struct {
-	currentPage string
+	page string
 }
 
-func NewPageCursor() pageCursor {
+func newPageCursor() pageCursor {
 	return pageCursor{
-		currentPage: "1",
+		page: "1",
 	}
 }
 
-func (pc pageCursor) NextPage() string {
-	pageInt, err := strconv.Atoi(pc.currentPage)
+func (pc pageCursor) nextPage() string {
+	pageInt, err := strconv.Atoi(pc.page)
 	if err != nil {
 		panic(err)
 	}
 	return strconv.Itoa(pageInt + 1)
 }
 
-func (pc pageCursor) CurrentPage() string {
-	return pc.currentPage
+func (pc pageCursor) currentPage() string {
+	return pc.page
 }
 
-func (pc *pageCursor) Increment() {
-	pageInt, err := strconv.Atoi(pc.currentPage)
+func (pc *pageCursor) increment() {
+	pageInt, err := strconv.Atoi(pc.page)
 	if err != nil {
 		panic(err)
 	}
-	pc.currentPage = strconv.Itoa(pageInt + 1)
-	fmt.Println(pc.currentPage)
+	pc.page = strconv.Itoa(pageInt + 1)
 }
