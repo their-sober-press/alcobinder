@@ -3,6 +3,7 @@ package paginator
 import (
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/html"
+	"github.com/gomarkdown/markdown/parser"
 )
 
 //Page is a page
@@ -25,6 +26,9 @@ func renderHTML(md string) string {
 	opts := html.RendererOptions{}
 	renderer := html.NewRenderer(opts)
 
-	html := markdown.ToHTML([]byte(md), nil, renderer)
+	extensions := parser.Attributes | parser.Tables
+	parser := parser.NewWithExtensions(extensions)
+
+	html := markdown.ToHTML([]byte(md), parser, renderer)
 	return string(html)
 }
