@@ -32,3 +32,13 @@ func renderHTML(md string) string {
 	html := markdown.ToHTML([]byte(md), parser, renderer)
 	return string(html)
 }
+
+// GetMarkdown returns the markdown of the page
+func (p Page) GetMarkdown() string {
+	return p.Markdown
+}
+
+// GetPageNumber returns the page number of the page
+func (p Page) GetPageNumber() string {
+	return p.PageNumber
+}
