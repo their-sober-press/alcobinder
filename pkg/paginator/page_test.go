@@ -29,8 +29,5 @@ var _ = Describe("Page", func() {
 			Expect(page.Markdown).To(Equal(pageText))
 		})
 
-		It("adds HTML generated from the markdown", func() {
-			Expect(page.HTML).To(Equal("<p><strong>First</strong> line</p>\n\n<p><em>Second</em> line</p>\n"))
-		})
 	})
 })
