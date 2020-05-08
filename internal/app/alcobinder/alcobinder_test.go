@@ -11,11 +11,11 @@ import (
 	. "github.com/alcoano/alcobinder/internal/app/alcobinder"
 )
 
-var _ = Describe("BindMarkdownsToPdf", func() {
+var _ = Describe("BindMarkdownsToFile", func() {
 	const inputDirectory = "../../../test/data/single_markdown_file/"
-	outputFile := fmt.Sprintf("../../../test/output/out%d.pdf", time.Now().UnixNano())
+	outputFile := fmt.Sprintf("../../../test/output/out%d.html", time.Now().UnixNano())
 	BeforeEach(func() {
-		err := BindMarkdownsToPdf(inputDirectory, outputFile)
+		err := BindMarkdownsToFile(inputDirectory, outputFile)
 		Expect(err).ToNot(HaveOccurred())
 	})
 

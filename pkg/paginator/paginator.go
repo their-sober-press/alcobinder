@@ -53,15 +53,7 @@ func formatWhiteSpace(pageText string) string {
 	outText := pageText
 	outText = strings.TrimLeft(outText, "\n")
 	outText = strings.TrimRight(outText, "\n")
-	paragraphs := strings.Split(outText, "\n\n")
-	var newParagraphs []string
-	for _, paragraph := range paragraphs {
-		if strings.HasPrefix(paragraph, " ") {
-			paragraph = "{.new-paragraph}\n" + paragraph
-		}
-		newParagraphs = append(newParagraphs, paragraph)
-	}
-	return strings.Join(newParagraphs, "\n\n")
+	return outText
 }
 
 type pageCursor struct {

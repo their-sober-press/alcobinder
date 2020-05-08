@@ -5,43 +5,40 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/thecodingmachine/gotenberg-go-client/v7"
+	"github.com/alcoano/alcobinder/pkg/htmlpagecombiner"
+	"github.com/alcoano/alcobinder/pkg/paginator"
+	"golang.org/x/net/html"
 )
 
-//BindMarkdownsToPdf binds a directory of markdown files into a single PDF
-func BindMarkdownsToPdf(markdownDirectory string, outputPath string) error {
+//BindMarkdownsToFile binds a directory of markdown files into a single PDF
+func BindMarkdownsToFile(markdownDirectory string, outputPath string) error {
+	outputFile, err := os.OpenFile(outputPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+	if err != nil {
+		return err
+	}
+	defer outputFile.Close()
+
 	concatenatedMarkdown, err := concatenateMarkdown(markdownDirectory)
 	if err != nil {
 		return err
 	}
 
-	client := &gotenberg.Client{Hostname: "http://localhost:3000"}
-	html := `
-		<!doctype html>
-			<html lang="en">
-			<head>
-				<meta charset="utf-8">
-				<title>My PDF</title>
-			</head>
-			<body>
-				{{ toHTML .DirPath "file.md" }}
-			</body>
-		</html>
-	`
-	index, err := gotenberg.NewDocumentFromString("index.html", html)
+	pages, err := paginator.Paginate(concatenatedMarkdown)
 	if err != nil {
 		return err
 	}
 
-	markdownAsset, err := gotenberg.NewDocumentFromString("file.md", concatenatedMarkdown)
+	castedPages := make([]htmlpagecombiner.Page, len(pages))
+	for i, v := range pages {
+		castedPages[i] = v
+	}
+
+	htmlOutput, err := htmlpagecombiner.CombinePages(castedPages)
 	if err != nil {
 		return err
 	}
 
-	req := gotenberg.NewMarkdownRequest(index)
-	req.Assets(markdownAsset)
-
-	err = client.Store(req, outputPath)
+	err = html.Render(outputFile, htmlOutput)
 	if err != nil {
 		return err
 	}

@@ -9,7 +9,7 @@ import (
 func main() {
 	markdownsDir := os.Args[1]
 	outputFile := os.Args[2]
-	err := alcobinder.BindMarkdownsToPdf(markdownsDir, outputFile)
+	err := alcobinder.BindMarkdownsToFile(markdownsDir, outputFile)
 	if err != nil {
 		panic(err)
 	}
