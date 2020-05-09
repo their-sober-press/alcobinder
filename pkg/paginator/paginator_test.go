@@ -103,11 +103,9 @@ var _ = Describe("Paginate", func() {
 			input = missingPagesAtBeginning
 		})
 
-		It("paginates fills in missing pages", func() {
+		It("ignores the missing pages", func() {
 			Expect(err).ToNot(HaveOccurred())
 			Expect(output).To(Equal([]Page{
-				{Markdown: "", PageNumber: "1"},
-				{Markdown: "", PageNumber: "2"},
 				{
 					Markdown:   "This is page three.",
 					PageNumber: "3",
@@ -125,9 +123,9 @@ var _ = Describe("Paginate", func() {
 			input = missingMiddlePages
 		})
 
-		It("paginates fills in missing pages", func() {
+		It("errors", func() {
 			Expect(err).To(HaveOccurred())
-			Expect(err).To(MatchError("PAGE 2 missing"))
+			Expect(err).To(MatchError("PAGE \"2\" missing, \"3\" found"))
 		})
 	})
 

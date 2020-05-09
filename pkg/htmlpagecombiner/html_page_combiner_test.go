@@ -80,6 +80,17 @@ var _ = Describe("HtmlPageCombiner", func() {
 			})
 		})
 
+		Context("when a paragraph starts with an asterisk", func() {
+			BeforeEach(func() {
+				pages = []Page{
+					paginator.NewPageFromMarkdown("1", "I have a footnote.\\*\n\n\\*I am a footnote."),
+				}
+			})
+			It("Adds the class for the footnote", func() {
+				Expect(sections.First().Html()).To(Equal("<page-number>1</page-number><p>I have a footnote.*</p>\n\n<p class=\"footnote\">*I am a footnote.</p>\n"))
+			})
+		})
+
 		Context("when there are some extra new lines", func() {
 			BeforeEach(func() {
 				pages = []Page{

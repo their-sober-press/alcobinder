@@ -21,10 +21,7 @@ func Paginate(text string) ([]Page, error) {
 			if err != nil {
 				return nil, err
 			}
-			for i := 1; i < pageNumber; i++ {
-				pages = append(pages, NewPageFromMarkdown(cursor.currentPage(), ""))
-				cursor.increment()
-			}
+			cursor.setPage(strconv.Itoa(pageNumber))
 			break
 		}
 	}
@@ -34,7 +31,8 @@ func Paginate(text string) ([]Page, error) {
 		if strings.HasPrefix(line, "PAGE ") {
 			pageNumber := line[5:]
 			if pageNumber != cursor.nextPage() {
-				return nil, fmt.Errorf("PAGE %s missing", cursor.nextPage())
+				fmt.Println("36" != "36")
+				return nil, fmt.Errorf("PAGE %#v missing, %#v found", cursor.nextPage(), pageNumber)
 			}
 			pageText = formatWhiteSpace(pageText)
 			pages = append(pages, NewPageFromMarkdown(cursor.currentPage(), pageText))
@@ -84,4 +82,8 @@ func (pc *pageCursor) increment() {
 		panic(err)
 	}
 	pc.page = strconv.Itoa(pageInt + 1)
+}
+
+func (pc *pageCursor) setPage(pageNumber string) {
+	pc.page = pageNumber
 }
