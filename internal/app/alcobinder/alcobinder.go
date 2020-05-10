@@ -10,15 +10,29 @@ import (
 	"golang.org/x/net/html"
 )
 
+//Options for specifying where an how to bind the markdowns into a document
+//all field are required
+type Options struct {
+	MarkdownsDirectory string
+	OutputPath         string
+	PageWidth          string
+	PageHeight         string
+}
+
 //BindMarkdownsToFile binds a directory of markdown files into a single PDF
-func BindMarkdownsToFile(markdownDirectory string, outputPath string) error {
-	outputFile, err := os.OpenFile(outputPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+func BindMarkdownsToFile(options Options) error {
+	err := validateOptions(options)
+	if err != nil {
+		return err
+	}
+
+	outputFile, err := os.OpenFile(options.OutputPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
 	}
 	defer outputFile.Close()
 
-	concatenatedMarkdown, err := concatenateMarkdown(markdownDirectory)
+	concatenatedMarkdown, err := concatenateMarkdown(options.MarkdownsDirectory)
 	if err != nil {
 		return err
 	}
@@ -33,7 +47,10 @@ func BindMarkdownsToFile(markdownDirectory string, outputPath string) error {
 		castedPages[i] = v
 	}
 
-	htmlOutput, err := htmlpagecombiner.CombinePages(castedPages)
+	htmlOutput, err := htmlpagecombiner.CombinePages(castedPages, htmlpagecombiner.CombineOptions{
+		PageHeight: options.PageHeight,
+		PageWidth:  options.PageWidth,
+	})
 	if err != nil {
 		return err
 	}
@@ -43,6 +60,22 @@ func BindMarkdownsToFile(markdownDirectory string, outputPath string) error {
 		return err
 	}
 
+	return nil
+}
+
+func validateOptions(options Options) error {
+	if options.MarkdownsDirectory == "" {
+		return MissingMarkdownsDirectory{}
+	}
+	if options.OutputPath == "" {
+		return MissingOutputPath{}
+	}
+	if options.PageWidth == "" {
+		return MissingPageWidth{}
+	}
+	if options.PageHeight == "" {
+		return MissingPageHeight{}
+	}
 	return nil
 }
 
@@ -69,3 +102,23 @@ func concatenateMarkdown(markdownDirectory string) (string, error) {
 	}
 	return concatinatedMarkdown, nil
 }
+
+// MissingMarkdownsDirectory error for when options do not specify a directory with markdown files for combining
+type MissingMarkdownsDirectory struct{}
+
+func (e MissingMarkdownsDirectory) Error() string { return "missing markdowns directory in config" }
+
+// MissingOutputPath error for when options do not specify path to put the generated HTML
+type MissingOutputPath struct{}
+
+func (e MissingOutputPath) Error() string { return "missing output path in config" }
+
+// MissingPageWidth error for when options do not specify output file page width
+type MissingPageWidth struct{}
+
+func (e MissingPageWidth) Error() string { return "missing page width in config" }
+
+// MissingPageHeight error for when options do not specify output file page height
+type MissingPageHeight struct{}
+
+func (e MissingPageHeight) Error() string { return "missing page height in config" }

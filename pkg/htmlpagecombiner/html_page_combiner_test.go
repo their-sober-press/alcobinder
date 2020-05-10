@@ -16,12 +16,22 @@ import (
 var _ = Describe("HtmlPageCombiner", func() {
 	Describe("CombinePages", func() {
 		var pages []Page
+		var combineOptions CombineOptions
 		var output *html.Node
 		var document *goquery.Document
 		var sections *goquery.Selection
 		var err error
+
+		BeforeEach(func() {
+			pages = []Page{}
+			combineOptions = CombineOptions{
+				PageWidth:  "8.5in",
+				PageHeight: "11in",
+			}
+		})
+
 		JustBeforeEach(func() {
-			output, err = CombinePages(pages)
+			output, err = CombinePages(pages, combineOptions)
 			Expect(err).NotTo(HaveOccurred())
 			document = goquery.NewDocumentFromNode(output)
 			sections = document.Find("section")
@@ -112,6 +122,20 @@ var _ = Describe("HtmlPageCombiner", func() {
 			})
 			It("renders the table", func() {
 				Expect(sections.First().Html()).To(Equal("<page-number>1</page-number><table>\n<thead>\n<tr>\n<th>Header 1</th>\n<th>Header 2</th>\n</tr>\n</thead>\n\n<tbody>\n<tr>\n<td>Cell 1</td>\n<td>Cell 2</td>\n</tr>\n</tbody>\n</table>\n"))
+			})
+		})
+
+		Context("when a page width and height are specified", func() {
+			BeforeEach(func() {
+				combineOptions = CombineOptions{
+					PageWidth:  "5in",
+					PageHeight: "10in",
+				}
+			})
+
+			It("puts the dimensions in the style sheet", func() {
+				style := document.Find("style")
+				Expect(style.Text()).To(ContainSubstring("size: 5in 10in;"))
 			})
 		})
 	})

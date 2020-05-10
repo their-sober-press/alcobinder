@@ -12,6 +12,8 @@ import (
 type alcoBinderOptions struct {
 	MarkdownsDirectory string `yaml:"markdowns_directory"`
 	OutputFilePath     string `yaml:"output_file_path"`
+	PageWidth          string `yaml:"page_width"`
+	PageHeight         string `yaml:"page_height"`
 }
 
 func main() {
@@ -24,7 +26,9 @@ func main() {
 			"    alcobinder PATH_TO_MANIFEST_FILE\n\n" +
 			"    PATH_TO_MANIFEST_FILE points to a YAML file with the following values:\n\n" +
 			"      markdowns_directory: directory containing markdown files.\n" +
-			"      output_file_path:    path where printable output HTML file is to be written\n")
+			"      output_file_path:    path where printable output HTML file is to be written\n" +
+			"      page_width:          width of the output pages\n" +
+			"      page_height:         height of the output pages\n")
 		os.Exit(0)
 	}
 
@@ -40,7 +44,12 @@ func main() {
 		os.Exit(65) // EX_DATAERR
 	}
 
-	err = alcobinder.BindMarkdownsToFile(config.MarkdownsDirectory, config.OutputFilePath)
+	err = alcobinder.BindMarkdownsToFile(alcobinder.Options{
+		OutputPath:         config.OutputFilePath,
+		MarkdownsDirectory: config.MarkdownsDirectory,
+		PageHeight:         config.PageHeight,
+		PageWidth:          config.PageWidth,
+	})
 	if err != nil {
 		panic(err)
 	}

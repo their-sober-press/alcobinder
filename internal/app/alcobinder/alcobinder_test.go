@@ -12,16 +12,71 @@ import (
 )
 
 var _ = Describe("BindMarkdownsToFile", func() {
-	const inputDirectory = "../../../test/data/single_markdown_file/"
-	outputFile := fmt.Sprintf("../../../test/output/out%d.html", time.Now().UnixNano())
+	var inputDirectory, outputFile, pageWidth, pageHeight string
+	var err error
+
 	BeforeEach(func() {
-		err := BindMarkdownsToFile(inputDirectory, outputFile)
-		Expect(err).ToNot(HaveOccurred())
+		inputDirectory = "../../../test/data/single_markdown_file/"
+		outputFile = fmt.Sprintf("../../../test/output/out%d.html", time.Now().UnixNano())
+		pageHeight = "11in"
+		pageWidth = "8.5in"
+	})
+
+	JustBeforeEach(func() {
+		err = BindMarkdownsToFile(Options{
+			MarkdownsDirectory: inputDirectory,
+			OutputPath:         outputFile,
+			PageHeight:         pageHeight,
+			PageWidth:          pageWidth,
+		})
 	})
 
 	It("should output a PDF file", func() {
+		Expect(err).ToNot(HaveOccurred())
 		info, err := os.Stat(outputFile)
 		Expect(err).NotTo(HaveOccurred())
 		Expect(info.IsDir()).To(BeFalse())
+	})
+
+	Describe("input validation", func() {
+		Context("when MarkdownsDirectory is missing", func() {
+			BeforeEach(func() {
+				inputDirectory = ""
+			})
+
+			It("returns an error", func() {
+				Expect(err).To(MatchError(MissingMarkdownsDirectory{}))
+			})
+		})
+
+		Context("when OutputPath is missing", func() {
+			BeforeEach(func() {
+				outputFile = ""
+			})
+
+			It("returns an error", func() {
+				Expect(err).To(MatchError(MissingOutputPath{}))
+			})
+		})
+
+		Context("when PageWidth is missing", func() {
+			BeforeEach(func() {
+				pageWidth = ""
+			})
+
+			It("returns an error", func() {
+				Expect(err).To(MatchError(MissingPageWidth{}))
+			})
+		})
+
+		Context("when PageHeight is missing", func() {
+			BeforeEach(func() {
+				pageHeight = ""
+			})
+
+			It("returns an error", func() {
+				Expect(err).To(MatchError(MissingPageHeight{}))
+			})
+		})
 	})
 })

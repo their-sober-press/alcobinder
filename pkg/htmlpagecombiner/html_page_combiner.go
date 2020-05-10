@@ -2,6 +2,8 @@ package htmlpagecombiner
 
 import (
 	"fmt"
+	"html/template"
+	"io"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -18,9 +20,28 @@ type Page interface {
 	GetPageNumber() string
 }
 
+// CombineOptions are arguments that are used to render the HTML document
+type CombineOptions struct {
+	PageWidth  string
+	PageHeight string
+}
+
 // CombinePages combines pages into a printer friendly HTML document
-func CombinePages(pages []Page) (*html.Node, error) {
-	reader := strings.NewReader(emptyBook)
+func CombinePages(pages []Page, options CombineOptions) (*html.Node, error) {
+	reader, writer := io.Pipe()
+	emptyBookTemplate, err := template.New("EmptyBook").Parse(emptyBook)
+	if err != nil {
+		panic(err)
+	}
+
+	go func() {
+		err = emptyBookTemplate.Execute(writer, options)
+		if err != nil {
+			panic(err)
+		}
+		writer.Close()
+	}()
+
 	document, err := goquery.NewDocumentFromReader(reader)
 	if err != nil {
 		return nil, err
@@ -87,7 +108,7 @@ const emptyBook = `
 			display: none;
 		}
 		@page {
-			size: 5.31in 8.13in;
+			size: {{.PageWidth}} {{.PageHeight}};
 			margin-bottom: 0.75in;
 			margin-left: 0.75in;
 			margin-right: 0.75in;
