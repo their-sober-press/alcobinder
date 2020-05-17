@@ -86,10 +86,15 @@ func decorateWithClasses(pageText string) string {
 }
 
 const emptyBook = `
-<html>
+<!doctype html>
+<html lang=en>
 <head>
 	<script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
 	<style>
+		html {
+			font-family: "Times New Roman MT Std", Times, serif;
+			hyphens: auto;
+		}
 		section {
 			page-break-after: always;
 			string-set: pageNumber attr(data-page-number)
@@ -98,30 +103,73 @@ const emptyBook = `
 			font-size: {{.BaseFontSize}};
 			margin: 0;
 			text-align: justify;
+			font-weight: 200;
+			line-height: 1.35;
+			/* letter-spacing: 0.05em; */
 		}
 		p.indented {
 			text-indent: 2ch;
 		}
 		blockquote + p::first-letter {
+			line-height: 1;
 			font-size: 1.5em;
 			font-weight: bold;
 		}
+		blockquote {
+			font-style: italic;
+			margin-bottom: 2em;
+		}
 		h1 {
 			string-set: chapterTitle content(text);
+			page: firstPageInChapter;
+			text-align: center;
+			font-weight: lighter;
+			font-size: 20pt;
 		}
 		@page {
 			size: {{.PageWidth}} {{.PageHeight}};
-			margin-bottom: 0.75in;
-			margin-left: 0.75in;
-			margin-right: 0.75in;
+			margin-bottom: 0.65in;
+			margin-left: 0.65in;
+			margin-right: 0.65in;
 			word-break: break-word;
-			@bottom-center {
-				content: string(pageNumber);
-			}
 			@top-center {
-				content: string(chapterTitle)
+				text-transform: uppercase;	
+				font-size: 0.65em;
+				letter-spacing: 0.25em;
+				content: string(chapterTitle);
 			}
 		}
+
+		@page firstPageInChapter {
+			@top-center {
+				content: "";
+			}
+			@top-right {
+				content: "";
+			}
+			@top-left {
+				content: "";
+			}
+			@bottom-center {
+				font-size: 0.75em;
+				content: string(pageNumber);
+			}
+		}
+
+		@page :left {
+			@top-left {
+				font-size: 0.75em;
+				content: string(pageNumber);
+			}
+		}
+
+		@page :right {
+			@top-right {
+				font-size: 0.75em;
+				content: string(pageNumber);
+			}
+		}
+
 		p.footnote {
 			margin-top: 1em;
 			font-size: 0.5em;
