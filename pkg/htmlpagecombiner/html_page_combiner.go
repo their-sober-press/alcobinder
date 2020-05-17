@@ -20,14 +20,15 @@ type Page interface {
 	GetPageNumber() string
 }
 
-// CombineOptions are arguments that are used to render the HTML document
-type CombineOptions struct {
-	PageWidth  string
-	PageHeight string
+// Options are arguments that are used to render the HTML document
+type Options struct {
+	PageWidth    string
+	PageHeight   string
+	BaseFontSize string
 }
 
 // CombinePages combines pages into a printer friendly HTML document
-func CombinePages(pages []Page, options CombineOptions) (*html.Node, error) {
+func CombinePages(pages []Page, options Options) (*html.Node, error) {
 	reader, writer := io.Pipe()
 	emptyBookTemplate, err := template.New("EmptyBook").Parse(emptyBook)
 	if err != nil {
@@ -49,7 +50,7 @@ func CombinePages(pages []Page, options CombineOptions) (*html.Node, error) {
 	body := document.Find("body").First()
 	for _, page := range pages {
 		pageHtml := renderHTML(page.GetMarkdown())
-		body.AppendHtml(fmt.Sprintf("<section><page-number>%s</page-number>%s</section>", page.GetPageNumber(), pageHtml))
+		body.AppendHtml(fmt.Sprintf(`<section data-page-number="%s">%s</section>`, page.GetPageNumber(), pageHtml))
 	}
 	return document.Get(0), nil
 }
@@ -91,10 +92,12 @@ const emptyBook = `
 	<style>
 		section {
 			page-break-after: always;
+			string-set: pageNumber attr(data-page-number)
 		}
 		p {
-			font-size: 11.5pt;
+			font-size: {{.BaseFontSize}};
 			margin: 0;
+			text-align: justify;
 		}
 		p.indented {
 			text-indent: 2ch;
@@ -103,24 +106,25 @@ const emptyBook = `
 			font-size: 1.5em;
 			font-weight: bold;
 		}
-		page-number {
-			string-set: pageNumber content(text);
-			display: none;
+		h1 {
+			string-set: chapterTitle content(text);
 		}
 		@page {
 			size: {{.PageWidth}} {{.PageHeight}};
 			margin-bottom: 0.75in;
 			margin-left: 0.75in;
 			margin-right: 0.75in;
-			text-align: justify;
 			word-break: break-word;
 			@bottom-center {
 				content: string(pageNumber);
 			}
+			@top-center {
+				content: string(chapterTitle)
+			}
 		}
 		p.footnote {
 			margin-top: 1em;
-			font-size: 8.5pt;
+			font-size: 0.5em;
 		}
 
 	</style>

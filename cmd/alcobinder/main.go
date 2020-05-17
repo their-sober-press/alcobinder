@@ -14,6 +14,7 @@ type alcoBinderOptions struct {
 	OutputFilePath     string `yaml:"output_file_path"`
 	PageWidth          string `yaml:"page_width"`
 	PageHeight         string `yaml:"page_height"`
+	BaseFontSize       string `yaml:"base_font_size"`
 }
 
 func main() {
@@ -28,7 +29,8 @@ func main() {
 			"      markdowns_directory: directory containing markdown files.\n" +
 			"      output_file_path:    path where printable output HTML file is to be written\n" +
 			"      page_width:          width of the output pages\n" +
-			"      page_height:         height of the output pages\n")
+			"      page_height:         height of the output pages\n" +
+			"      base_font_size:      font size of paragraph text\n")
 		os.Exit(0)
 	}
 
@@ -49,6 +51,7 @@ func main() {
 		MarkdownsDirectory: config.MarkdownsDirectory,
 		PageHeight:         config.PageHeight,
 		PageWidth:          config.PageWidth,
+		BaseFontSize:       config.BaseFontSize,
 	})
 	if err != nil {
 		panic(err)

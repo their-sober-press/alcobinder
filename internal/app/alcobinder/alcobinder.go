@@ -17,6 +17,7 @@ type Options struct {
 	OutputPath         string
 	PageWidth          string
 	PageHeight         string
+	BaseFontSize       string
 }
 
 //BindMarkdownsToFile binds a directory of markdown files into a single PDF
@@ -47,9 +48,10 @@ func BindMarkdownsToFile(options Options) error {
 		castedPages[i] = v
 	}
 
-	htmlOutput, err := htmlpagecombiner.CombinePages(castedPages, htmlpagecombiner.CombineOptions{
-		PageHeight: options.PageHeight,
-		PageWidth:  options.PageWidth,
+	htmlOutput, err := htmlpagecombiner.CombinePages(castedPages, htmlpagecombiner.Options{
+		PageHeight:   options.PageHeight,
+		PageWidth:    options.PageWidth,
+		BaseFontSize: options.BaseFontSize,
 	})
 	if err != nil {
 		return err
@@ -75,6 +77,9 @@ func validateOptions(options Options) error {
 	}
 	if options.PageHeight == "" {
 		return MissingPageHeight{}
+	}
+	if options.BaseFontSize == "" {
+		return MissingBaseFontSize{}
 	}
 	return nil
 }
@@ -122,3 +127,8 @@ func (e MissingPageWidth) Error() string { return "missing page width in config"
 type MissingPageHeight struct{}
 
 func (e MissingPageHeight) Error() string { return "missing page height in config" }
+
+// MissingBaseFontSize error for when options do not specify the base font size for page rendering
+type MissingBaseFontSize struct{}
+
+func (e MissingBaseFontSize) Error() string { return "missing base font size in config" }

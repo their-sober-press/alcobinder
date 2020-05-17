@@ -12,7 +12,7 @@ import (
 )
 
 var _ = Describe("BindMarkdownsToFile", func() {
-	var inputDirectory, outputFile, pageWidth, pageHeight string
+	var inputDirectory, outputFile, pageWidth, pageHeight, baseFontSize string
 	var err error
 
 	BeforeEach(func() {
@@ -20,6 +20,7 @@ var _ = Describe("BindMarkdownsToFile", func() {
 		outputFile = fmt.Sprintf("../../../test/output/out%d.html", time.Now().UnixNano())
 		pageHeight = "11in"
 		pageWidth = "8.5in"
+		baseFontSize = "10pt"
 	})
 
 	JustBeforeEach(func() {
@@ -28,6 +29,7 @@ var _ = Describe("BindMarkdownsToFile", func() {
 			OutputPath:         outputFile,
 			PageHeight:         pageHeight,
 			PageWidth:          pageWidth,
+			BaseFontSize:       baseFontSize,
 		})
 	})
 
@@ -76,6 +78,16 @@ var _ = Describe("BindMarkdownsToFile", func() {
 
 			It("returns an error", func() {
 				Expect(err).To(MatchError(MissingPageHeight{}))
+			})
+		})
+
+		Context("when BaseFontSize is missing", func() {
+			BeforeEach(func() {
+				baseFontSize = ""
+			})
+
+			It("returns an error", func() {
+				Expect(err).To(MatchError(MissingBaseFontSize{}))
 			})
 		})
 	})
