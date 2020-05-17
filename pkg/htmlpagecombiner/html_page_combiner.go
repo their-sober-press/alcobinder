@@ -105,7 +105,6 @@ const emptyBook = `
 			text-align: justify;
 			font-weight: 200;
 			line-height: 1.35;
-			/* letter-spacing: 0.05em; */
 		}
 		p.indented {
 			text-indent: 2ch;
