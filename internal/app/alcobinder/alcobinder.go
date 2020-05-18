@@ -10,30 +10,15 @@ import (
 	"golang.org/x/net/html"
 )
 
-//Options for specifying where an how to bind the markdowns into a document
-//all field are required
-type Options struct {
-	MarkdownsDirectory string
-	OutputPath         string
-	PageWidth          string
-	PageHeight         string
-	BaseFontSize       string
-}
-
 //BindMarkdownsToFile binds a directory of markdown files into a single PDF
-func BindMarkdownsToFile(options Options) error {
-	err := validateOptions(options)
-	if err != nil {
-		return err
-	}
-
-	outputFile, err := os.OpenFile(options.OutputPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+func BindMarkdownsToFile(inputFolder string, inputCSSFile string, outputPath string) error {
+	outputFile, err := os.OpenFile(outputPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
 	}
 	defer outputFile.Close()
 
-	concatenatedMarkdown, err := concatenateMarkdown(options.MarkdownsDirectory)
+	concatenatedMarkdown, err := concatenateMarkdown(inputFolder)
 	if err != nil {
 		return err
 	}
@@ -48,11 +33,12 @@ func BindMarkdownsToFile(options Options) error {
 		castedPages[i] = v
 	}
 
-	htmlOutput, err := htmlpagecombiner.CombinePages(castedPages, htmlpagecombiner.Options{
-		PageHeight:   options.PageHeight,
-		PageWidth:    options.PageWidth,
-		BaseFontSize: options.BaseFontSize,
-	})
+	css, err := ioutil.ReadFile(inputCSSFile)
+	if err != nil {
+		return err
+	}
+
+	htmlOutput, err := htmlpagecombiner.CombinePages(castedPages, string(css))
 	if err != nil {
 		return err
 	}
@@ -62,25 +48,6 @@ func BindMarkdownsToFile(options Options) error {
 		return err
 	}
 
-	return nil
-}
-
-func validateOptions(options Options) error {
-	if options.MarkdownsDirectory == "" {
-		return MissingMarkdownsDirectory{}
-	}
-	if options.OutputPath == "" {
-		return MissingOutputPath{}
-	}
-	if options.PageWidth == "" {
-		return MissingPageWidth{}
-	}
-	if options.PageHeight == "" {
-		return MissingPageHeight{}
-	}
-	if options.BaseFontSize == "" {
-		return MissingBaseFontSize{}
-	}
 	return nil
 }
 

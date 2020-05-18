@@ -1,0 +1,211 @@
+html {
+	font-family: "Times New Roman MT Std", Times, serif;
+	hyphens: auto;
+}
+
+section {
+	page-break-after: always;
+	string-set: pageNumber attr(data-page-number)
+}
+
+p {
+	font-size: 10.75pt;
+	margin: 0;
+	text-align: justify;
+	line-height: 1.35;
+}
+p.indented {
+	text-indent: 2ch;
+}
+
+blockquote + p::first-letter {
+	line-height: 1;
+	font-size: 1.5em;
+	font-weight: bold;
+}
+blockquote {
+	font-style: italic;
+	margin-bottom: 2em;
+}
+
+h1 {
+	string-set: chapterTitle content(text);
+	page: firstPageInChapter;
+	text-align: center;
+	font-weight: lighter;
+	font-size: 20pt;
+	margin-top: 10pt;
+}
+h2 {
+	font-weight: lighter;
+	font-size: 16pt;
+	bookmark-level: none;
+}
+h3 {
+	font-weight: lighter;
+	font-size: 14pt;
+	bookmark-level: none;
+}
+
+@page {
+	size: 5.31in 8.13in;
+	margin-top: 0.85in;
+	margin-left: 0.65in;
+	margin-right: 0.65in;
+	margin-bottom: 0.7in;
+	@top-center {
+		text-transform: uppercase;	
+		content: string(chapterTitle);
+		margin-top: 22pt;
+		font-size: 0.6em;
+		letter-spacing: 0.25em;
+	}
+	@top-right {
+		margin-top: 22pt;
+		margin-right: 5pt;
+		font-size: 9pt;
+		letter-spacing: 1pt;
+	}
+	@top-left {
+		margin-top: 22pt;
+		margin-left: 5pt;
+		font-size: 9pt;
+		letter-spacing: 1pt;
+	}
+	@bottom-center {
+		font-size: 7.5pt;
+		letter-spacing: 1pt;
+		margin-bottom: 50pt;
+	}
+}
+@page firstPageInChapter {
+	@top-center {
+		content: "";
+	}
+	@top-right {
+		content: "";
+	}
+	@top-left {
+		content: "";
+	}
+	@bottom-center {
+		content: string(pageNumber);
+	}
+}
+@page :left {
+	@top-left {
+		content: string(pageNumber);
+	}
+}
+@page :right {
+	@top-right {
+		content: string(pageNumber);
+	}
+}
+@page blank {
+	@top-right { content: "" }
+	@top-left { content: "" }
+	@top-center { content: "" }
+	@bottom-center { content: "" }
+}
+
+p.footnote {
+	margin-top: 1em;
+	padding-top: 0.5em;
+	font-size: 7pt;
+	border-top: 0.5pt solid black;
+}
+
+section[data-page-number="1"] {
+	page: blank;
+	padding-top: 0.5in;
+}
+
+section[data-page-number="1"] p:first-child {
+	font-size: 12pt;
+	margin-bottom: 3.5in;
+}
+
+section[data-page-number="1"] p {
+	text-align: center;
+	margin-bottom: 2em;
+	font-size: 10pt;
+}
+
+section[data-page-number="19"],
+section[data-page-number="20"]
+{
+	page: blank;
+}
+
+section[data-page-number="2"] h2 {
+	margin-top: 75pt;
+}
+
+section[data-page-number="4"] h2 {
+	font-size: 20pt;
+	text-align: center;
+}
+
+section[data-page-number="4"] p {
+	margin-bottom: 1em;
+	text-align: center;
+}
+
+section[data-page-number="5"] p,
+section[data-page-number="6"] p,
+section[data-page-number="7"] p,
+section[data-page-number="8"] p,
+section[data-page-number="9"] p,
+section[data-page-number="10"] p,
+section[data-page-number="11"] p,
+section[data-page-number="12"] p,
+section[data-page-number="13"] p {
+	font-size: 10pt;
+	margin-bottom: 3pt;
+	margin-left: 20pt;
+	line-height: 1.22;
+}
+
+section[data-page-number="5"] h2,
+section[data-page-number="6"] h2,
+section[data-page-number="7"] h2,
+section[data-page-number="8"] h2,
+section[data-page-number="9"] h2,
+section[data-page-number="10"] h2,
+section[data-page-number="11"] h2,
+section[data-page-number="12"] h2,
+section[data-page-number="13"] h2 {
+	font-size: 12pt;
+	text-align: center;
+}
+
+section[data-page-number="6"] h3,
+section[data-page-number="7"] h3,
+section[data-page-number="8"] h3,
+section[data-page-number="5"] h3,
+section[data-page-number="9"] h3,
+section[data-page-number="10"] h3,
+section[data-page-number="11"] h3,
+section[data-page-number="12"] h3,
+section[data-page-number="13"] h3 {
+	margin-bottom: 4pt;
+	font-size: 11pt;
+}
+
+section[data-page-number="6"] h3 > em,
+section[data-page-number="7"] h3 > em,
+section[data-page-number="8"] h3 > em,
+section[data-page-number="5"] h3 > em,
+section[data-page-number="9"] h3 > em,
+section[data-page-number="10"] h3 > em,
+section[data-page-number="11"] h3 > em,
+section[data-page-number="12"] h3 > em,
+section[data-page-number="13"] h3 > em {
+	font-style: normal;
+	float: right;
+}
+
+section[data-page-number="9"] h2 {
+	margin-top: 7em;
+}

@@ -2,8 +2,6 @@ package htmlpagecombiner
 
 import (
 	"fmt"
-	"html/template"
-	"io"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -28,26 +26,13 @@ type Options struct {
 }
 
 // CombinePages combines pages into a printer friendly HTML document
-func CombinePages(pages []Page, options Options) (*html.Node, error) {
-	reader, writer := io.Pipe()
-	emptyBookTemplate, err := template.New("EmptyBook").Parse(emptyBook)
-	if err != nil {
-		panic(err)
-	}
-
-	go func() {
-		err = emptyBookTemplate.Execute(writer, options)
-		if err != nil {
-			panic(err)
-		}
-		writer.Close()
-	}()
-
-	document, err := goquery.NewDocumentFromReader(reader)
+func CombinePages(pages []Page, css string) (*html.Node, error) {
+	document, err := goquery.NewDocumentFromReader(strings.NewReader(emptyBook))
 	if err != nil {
 		return nil, err
 	}
 	body := document.Find("body").First()
+	document.Find("style").SetText(css)
 	for _, page := range pages {
 		pageHtml := renderHTML(page.GetMarkdown())
 		body.AppendHtml(fmt.Sprintf(`<section data-page-number="%s">%s</section>`, page.GetPageNumber(), pageHtml))
@@ -89,92 +74,7 @@ const emptyBook = `
 <!doctype html>
 <html lang=en>
 <head>
-	<script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
-	<style>
-		html {
-			font-family: "Times New Roman MT Std", Times, serif;
-			hyphens: auto;
-		}
-		section {
-			page-break-after: always;
-			string-set: pageNumber attr(data-page-number)
-		}
-		p {
-			font-size: {{.BaseFontSize}};
-			margin: 0;
-			text-align: justify;
-			font-weight: 200;
-			line-height: 1.35;
-		}
-		p.indented {
-			text-indent: 2ch;
-		}
-		blockquote + p::first-letter {
-			line-height: 1;
-			font-size: 1.5em;
-			font-weight: bold;
-		}
-		blockquote {
-			font-style: italic;
-			margin-bottom: 2em;
-		}
-		h1 {
-			string-set: chapterTitle content(text);
-			page: firstPageInChapter;
-			text-align: center;
-			font-weight: lighter;
-			font-size: 20pt;
-		}
-		@page {
-			size: {{.PageWidth}} {{.PageHeight}};
-			margin-bottom: 0.65in;
-			margin-left: 0.65in;
-			margin-right: 0.65in;
-			word-break: break-word;
-			@top-center {
-				text-transform: uppercase;	
-				font-size: 0.65em;
-				letter-spacing: 0.25em;
-				content: string(chapterTitle);
-			}
-		}
-
-		@page firstPageInChapter {
-			@top-center {
-				content: "";
-			}
-			@top-right {
-				content: "";
-			}
-			@top-left {
-				content: "";
-			}
-			@bottom-center {
-				font-size: 0.75em;
-				content: string(pageNumber);
-			}
-		}
-
-		@page :left {
-			@top-left {
-				font-size: 0.75em;
-				content: string(pageNumber);
-			}
-		}
-
-		@page :right {
-			@top-right {
-				font-size: 0.75em;
-				content: string(pageNumber);
-			}
-		}
-
-		p.footnote {
-			margin-top: 1em;
-			font-size: 0.5em;
-		}
-
-	</style>
+	<style></style>
 </head>
 <body>
 </body>

@@ -1,9 +1,6 @@
 package htmlpagecombiner_test
 
 import (
-	"bytes"
-	"io"
-
 	"github.com/PuerkitoBio/goquery"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -16,43 +13,26 @@ import (
 var _ = Describe("HtmlPageCombiner", func() {
 	Describe("CombinePages", func() {
 		var pages []Page
-		var combineOptions Options
 		var output *html.Node
 		var document *goquery.Document
 		var sections *goquery.Selection
 		var err error
+		const css = "h1 { color: red }"
 
 		BeforeEach(func() {
 			pages = []Page{}
-			combineOptions = Options{
-				PageWidth:  "8.5in",
-				PageHeight: "11in",
-			}
 		})
 
 		JustBeforeEach(func() {
-			output, err = CombinePages(pages, combineOptions)
+			output, err = CombinePages(pages, css)
 			Expect(err).NotTo(HaveOccurred())
 			document = goquery.NewDocumentFromNode(output)
 			sections = document.Find("section")
 		})
-		It("creates an HTML document", func() {
-			reader, writer := io.Pipe()
-			go func() {
-				err := html.Render(writer, output)
-				Expect(err).NotTo(HaveOccurred())
-				writer.Close()
-			}()
-			buf := bytes.Buffer{}
-			_, err = buf.ReadFrom(reader)
-			Expect(err).NotTo(HaveOccurred())
-			outputString := buf.String()
-			Expect(outputString).To(HavePrefix("<html>"))
-		})
-		It("adds the Pages.js script", func() {
-			src, exists := document.Find("script").Attr("src")
-			Expect(exists).To(BeTrue())
-			Expect(src).To(Equal("https://unpkg.com/pagedjs/dist/paged.polyfill.js"))
+
+		It("adds the CSS", func() {
+			Expect(document.Find("style").Text()).To(Equal(css))
+
 		})
 
 		Context("when there are pages", func() {
@@ -125,34 +105,6 @@ var _ = Describe("HtmlPageCombiner", func() {
 			})
 		})
 
-		Context("when a page width and height are specified", func() {
-			BeforeEach(func() {
-				combineOptions = Options{
-					PageWidth:  "5in",
-					PageHeight: "10in",
-				}
-			})
-
-			It("puts the dimensions in the style sheet", func() {
-				style := document.Find("style")
-				Expect(style.Text()).To(ContainSubstring("size: 5in 10in;"))
-			})
-		})
-
-		Context("when base font size is specified", func() {
-			BeforeEach(func() {
-				combineOptions = Options{
-					PageWidth:    "5in",
-					PageHeight:   "10in",
-					BaseFontSize: "10pt",
-				}
-			})
-
-			It("puts the dimensions in the style sheet", func() {
-				style := document.Find("style")
-				Expect(style.Text()).To(ContainSubstring("font-size: 10pt"))
-			})
-		})
 	})
 })
 
