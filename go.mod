@@ -4,6 +4,7 @@ go 1.14
 
 require (
 	github.com/PuerkitoBio/goquery v1.5.1
+	github.com/dhowden/numerus v0.0.0-20150607071238-81bac9e02875
 	github.com/golang/protobuf v1.3.5 // indirect
 	github.com/gomarkdown/markdown v0.0.0-20200316172748-fd1f3374857d
 	github.com/onsi/ginkgo v1.12.0

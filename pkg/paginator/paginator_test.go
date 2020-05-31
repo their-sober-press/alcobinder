@@ -39,30 +39,23 @@ PAGE 3
 This is page three.
 `
 
-const withFormatting = `
+const nonsensicalPageNumber = `
 PAGE 1
-This is page _one_.
+This is page one.
 
-PAGE 2
-This is page **two**.
+PAGE $
+This is the dollar page.
 `
 
-const withIndents = `
+const withRomanNumerals = `
+PAGE i
+This is preface page one.
+
+PAGE ii
+This is preface page two.
+
 PAGE 1
-# Heading
-
-  This is page _one_.
-
-PAGE 2
-This is page **two**.
-`
-
-const withTables = `
-PAGE 1
-
-| Header 1 | Header 2 |
-|----------|----------|
-| Cell 1   | Cell 2   |
+This is page one.
 `
 
 var _ = Describe("Paginate", func() {
@@ -129,4 +122,49 @@ var _ = Describe("Paginate", func() {
 		})
 	})
 
+	Context("when the first page has a nonsensical number", func() {
+		BeforeEach(func() {
+			input = "PAGE !"
+		})
+
+		It("errors", func() {
+			Expect(err).To(HaveOccurred())
+			Expect(err).To(MatchError("first page has an invalid page number \"!\""))
+		})
+	})
+
+	Context("when there is a nonsensical page number in the middle", func() {
+		BeforeEach(func() {
+			input = nonsensicalPageNumber
+		})
+
+		It("errors", func() {
+			Expect(err).To(HaveOccurred())
+			Expect(err).To(MatchError("invalid page number \"$\" after page \"1\""))
+		})
+	})
+
+	Context("when pages start with roman numerals", func() {
+		BeforeEach(func() {
+			input = withRomanNumerals
+		})
+
+		It("paginates roman numerals until it hits arabic numerals", func() {
+			Expect(err).ToNot(HaveOccurred())
+			Expect(output).To(Equal([]Page{
+				{
+					Markdown:   "This is preface page one.",
+					PageNumber: "i",
+				},
+				{
+					Markdown:   "This is preface page two.",
+					PageNumber: "ii",
+				},
+				{
+					Markdown:   "This is page one.",
+					PageNumber: "1",
+				},
+			}))
+		})
+	})
 })

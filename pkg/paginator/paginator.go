@@ -3,7 +3,6 @@ package paginator
 import (
 	"bufio"
 	"fmt"
-	"strconv"
 	"strings"
 )
 
@@ -11,17 +10,18 @@ import (
 func Paginate(text string) ([]Page, error) {
 	scanner := bufio.NewScanner(strings.NewReader(text))
 	pages := []Page{}
-	var cursor pageCursor = newPageCursor()
+	var cursor NumeralCursor = NewArabicNumeralCursor()
 	var pageText string
+	var err error
 
 	for scanner.Scan() {
 		line := scanner.Text()
 		if strings.HasPrefix(line, "PAGE ") {
-			pageNumber, err := strconv.Atoi(line[5:])
+			firstPageNumber := line[5:]
+			cursor, err = NewNumeralCursorFromString(firstPageNumber)
 			if err != nil {
-				return nil, err
+				return nil, fmt.Errorf("first page has an invalid page number %#v", firstPageNumber)
 			}
-			cursor.setPage(strconv.Itoa(pageNumber))
 			break
 		}
 	}
@@ -29,21 +29,22 @@ func Paginate(text string) ([]Page, error) {
 	for scanner.Scan() {
 		line := scanner.Text()
 		if strings.HasPrefix(line, "PAGE ") {
-			pageNumber := line[5:]
-			if pageNumber != cursor.nextPage() {
-				fmt.Println("36" != "36")
-				return nil, fmt.Errorf("PAGE %#v missing, %#v found", cursor.nextPage(), pageNumber)
-			}
 			pageText = formatWhiteSpace(pageText)
-			pages = append(pages, NewPageFromMarkdown(cursor.currentPage(), pageText))
+			page := NewPageFromMarkdown(cursor.Current(), pageText)
 			pageText = ""
-			cursor.increment()
+
+			pageNumber := line[5:]
+			err := safelyIncrement(&cursor, pageNumber)
+			if err != nil {
+				return nil, err
+			}
+			pages = append(pages, page)
 		} else {
 			pageText += (line + "\n")
 		}
 	}
 	pageText = formatWhiteSpace(pageText)
-	pages = append(pages, NewPageFromMarkdown(cursor.currentPage(), pageText))
+	pages = append(pages, NewPageFromMarkdown(cursor.Current(), pageText))
 	return pages, nil
 }
 
@@ -54,36 +55,20 @@ func formatWhiteSpace(pageText string) string {
 	return outText
 }
 
-type pageCursor struct {
-	page string
-}
-
-func newPageCursor() pageCursor {
-	return pageCursor{
-		page: "1",
+func safelyIncrement(numeralCursorPtr *NumeralCursor, nextPage string) (err error) {
+	numeralCursor := *numeralCursorPtr
+	isNextPage, isSameType := numeralCursor.IsNextValue(nextPage)
+	if !isSameType {
+		newNumeralCursor, err := NewNumeralCursorFromString(nextPage)
+		if err != nil {
+			return fmt.Errorf("invalid page number %#v after page %#v", nextPage, numeralCursor.Current())
+		}
+		*numeralCursorPtr = newNumeralCursor
+		return nil
 	}
-}
-
-func (pc pageCursor) nextPage() string {
-	pageInt, err := strconv.Atoi(pc.page)
-	if err != nil {
-		panic(err)
+	if !isNextPage {
+		return fmt.Errorf("PAGE %#v missing, %#v found", numeralCursor.PeekNext(), nextPage)
 	}
-	return strconv.Itoa(pageInt + 1)
-}
-
-func (pc pageCursor) currentPage() string {
-	return pc.page
-}
-
-func (pc *pageCursor) increment() {
-	pageInt, err := strconv.Atoi(pc.page)
-	if err != nil {
-		panic(err)
-	}
-	pc.page = strconv.Itoa(pageInt + 1)
-}
-
-func (pc *pageCursor) setPage(pageNumber string) {
-	pc.page = pageNumber
+	numeralCursor.Increment()
+	return nil
 }
