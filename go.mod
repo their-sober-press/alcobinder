@@ -1,4 +1,4 @@
-module github.com/alcoano/alcobinder
+module github.com/their-sober-press/alcobinder
 
 go 1.14
 

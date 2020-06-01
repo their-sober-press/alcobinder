@@ -6,8 +6,8 @@ import (
 	. "github.com/onsi/gomega"
 	"golang.org/x/net/html"
 
-	. "github.com/alcoano/alcobinder/pkg/htmlpagecombiner"
-	"github.com/alcoano/alcobinder/pkg/paginator"
+	. "github.com/their-sober-press/alcobinder/pkg/htmlpagecombiner"
+	"github.com/their-sober-press/alcobinder/pkg/paginator"
 )
 
 var _ = Describe("HtmlPageCombiner", func() {

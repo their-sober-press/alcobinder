@@ -8,7 +8,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	. "github.com/alcoano/alcobinder/internal/app/alcobinder"
+	. "github.com/their-sober-press/alcobinder/internal/app/alcobinder"
 )
 
 var _ = Describe("BindMarkdownsToFile", func() {

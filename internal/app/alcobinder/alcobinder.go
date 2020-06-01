@@ -5,8 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/alcoano/alcobinder/pkg/htmlpagecombiner"
-	"github.com/alcoano/alcobinder/pkg/paginator"
+	"github.com/their-sober-press/alcobinder/pkg/htmlpagecombiner"
+	"github.com/their-sober-press/alcobinder/pkg/paginator"
 	"golang.org/x/net/html"
 )
 

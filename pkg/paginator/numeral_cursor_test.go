@@ -4,7 +4,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	. "github.com/alcoano/alcobinder/pkg/paginator"
+	. "github.com/their-sober-press/alcobinder/pkg/paginator"
 )
 
 var _ = Describe("ParseNumeralCursor", func() {
