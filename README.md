@@ -3,6 +3,9 @@
 Binds markdown files into an HTML file which is ready to be converted PDF formatted using the [CSS Paged Media]
 working draft.
 
+[![mintwise alcobinder](https://motevets.com/images/alcobinder.svg)][Their Sober Press]
+
+_Image credit: [Restoration Hardware: Cast Iron Book Press]_
 ## Getting started
 
 ### Prerequisites
@@ -84,3 +87,4 @@ versions with minimal friction.
 [inclusive remix of the book Alcoholic Anonymous]: https://github.com/their-sober-press/inclusive-sober-literature/tree/master/remixed/big_book
 [a stylesheet for an inclusive remix of the 12&12]: https://github.com/their-sober-press/alcobinder/blob/master/css/12-and-12.css
 [Their Sober Press]: http://theirsober.press
+[Restoration Hardware: Cast Iron Book Press]: https://www.restorationhardware.com/catalog/product/product.jsp?productId=prod70012
