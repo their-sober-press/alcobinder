@@ -5,8 +5,6 @@ working draft.
 
 <img src=https://motevets.com/images/alcobinder.svg width="500" alt="alcobinder book press logo" title="book press"/>
 
-[![mintwise alcobinder](https://motevets.com/images/alcobinder.svg | width=100)]
-
 _Image credit: [Restoration Hardware: Cast Iron Book Press]_
 ## Getting started
 
