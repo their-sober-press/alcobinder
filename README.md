@@ -3,7 +3,7 @@
 Binds markdown files into an HTML file which is ready to be converted PDF formatted using the [CSS Paged Media]
 working draft.
 
-[![mintwise alcobinder](https://motevets.com/images/alcobinder.svg)][Their Sober Press]
+[![mintwise alcobinder](https://motevets.com/images/alcobinder.svg =100x)][Their Sober Press]
 
 _Image credit: [Restoration Hardware: Cast Iron Book Press]_
 ## Getting started
