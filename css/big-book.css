@@ -1,0 +1,118 @@
+html {
+	font-family: "Nimbus Roman", Times, serif;
+	hyphens: auto;
+}
+
+section {
+	page-break-after: always;
+	string-set: pageNumber attr(data-page-number)
+}
+
+p {
+	font-size: 12pt;
+	margin: 0;
+	text-align: justify;
+	line-height: 1.3;
+}
+p.indented {
+	text-indent: 2ch;
+}
+
+blockquote + p::first-letter {
+	line-height: 1;
+	font-size: 1.5em;
+	font-weight: bold;
+}
+blockquote {
+	font-style: italic;
+	margin-bottom: 2em;
+}
+
+h1 {
+	page: firstPageInChapter;
+	text-align: center;
+	font-weight: lighter;
+	font-size: 20pt;
+	margin-top: 10pt;
+}
+h2 {
+	string-set: chapterTitle content(text);
+	font-weight: lighter;
+	font-size: 16pt;
+	bookmark-level: none;
+}
+h3 {
+	font-weight: lighter;
+	font-size: 14pt;
+	bookmark-level: none;
+}
+
+@page {
+	size: 5.5in 8.5in;
+	margin-top: 0.65in;
+	margin-left: 0.65in;
+	margin-right: 0.65in;
+	margin-bottom: 0.5in;
+	@top-center {
+		text-transform: uppercase;	
+		content: string(chapterTitle);
+		margin-top: 22pt;
+		font-size: 0.6em;
+		letter-spacing: 0.25em;
+	}
+	@top-right {
+		margin-top: 22pt;
+		margin-right: 5pt;
+		font-size: 9pt;
+		letter-spacing: 1pt;
+	}
+	@top-left {
+		margin-top: 22pt;
+		margin-left: 5pt;
+		font-size: 9pt;
+		letter-spacing: 1pt;
+	}
+	@bottom-center {
+		vertical-align: top;
+		font-size: 9pt;
+		letter-spacing: 1pt;
+	}
+}
+@page firstPageInChapter {
+	margin-bottom: 0.65in;
+	@top-center {
+		content: "";
+	}
+	@top-right {
+		content: "";
+	}
+	@top-left {
+		content: "";
+	}
+	@bottom-center {
+		content: string(pageNumber);
+	}
+}
+@page :left {
+	@top-left {
+		content: string(pageNumber);
+	}
+}
+@page :right {
+	@top-right {
+		content: string(pageNumber);
+	}
+}
+@page blank {
+	@top-right { content: "" }
+	@top-left { content: "" }
+	@top-center { content: "" }
+	@bottom-center { content: "" }
+}
+
+p.footnote {
+	margin-top: 1em;
+	padding-top: 0.5em;
+	font-size: 7pt;
+	border-top: 0.5pt solid black;
+}
