@@ -18,14 +18,13 @@ p.indented {
 	text-indent: 2ch;
 }
 
-blockquote + p::first-letter {
+h1 + p::first-letter, h2 + p::first-letter {
 	line-height: 1;
 	font-size: 1.5em;
 	font-weight: bold;
 }
 blockquote {
 	font-style: italic;
-	margin-bottom: 2em;
 }
 
 h1 {
@@ -115,4 +114,47 @@ p.footnote {
 	padding-top: 0.5em;
 	font-size: 7pt;
 	border-top: 0.5pt solid black;
+}
+
+section[data-page-number="xxv"] blockquote,
+section[data-page-number="xxvi"] blockquote,
+section[data-page-number="xxvii"] blockquote,
+section[data-page-number="xxviii"] blockquote,
+section[data-page-number="xxix"] blockquote,
+section[data-page-number="xxx"] blockquote,
+section[data-page-number="xxxi"] blockquote,
+section[data-page-number="xxxii"] blockquote
+{
+	margin-left: 2ch;
+	margin-right: 2ch;
+}
+
+section[data-page-number="xxv"] blockquote p,
+section[data-page-number="xxvi"] blockquote p,
+section[data-page-number="xxvii"] blockquote p,
+section[data-page-number="xxviii"] blockquote p,
+section[data-page-number="xxix"] blockquote p,
+section[data-page-number="xxx"] blockquote p,
+section[data-page-number="xxxi"] blockquote p,
+section[data-page-number="xxxii"] blockquote p
+{
+	font-size: 11pt;
+	font-style: normal;
+	text-indent: 2ch;
+}
+
+section[data-page-number="xxv"] blockquote p:first-child,
+section[data-page-number="xxvi"] blockquote p:first-child,
+section[data-page-number="xxviii"] blockquote p:first-child,
+section[data-page-number="xxix"] blockquote p:first-child,
+section[data-page-number="xxx"] blockquote p:first-child
+{
+	text-indent: 0ch;
+}
+
+section[data-page-number="xxvi"] blockquote p:last-child,
+section[data-page-number="xxvi"] blockquote p:nth-last-child(2),
+section[data-page-number="xxxii"] blockquote p:last-child
+{
+	text-align: right;
 }
