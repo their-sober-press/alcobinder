@@ -27,15 +27,18 @@ blockquote {
 	font-style: italic;
 }
 
+h1, h2 {
+	string-set: chapterTitle content(text);
+	text-align: center;
+}
+
 h1 {
 	page: firstPageInChapter;
-	text-align: center;
 	font-weight: lighter;
 	font-size: 20pt;
 	margin-top: 10pt;
 }
 h2 {
-	string-set: chapterTitle content(text);
 	font-weight: lighter;
 	font-size: 16pt;
 	bookmark-level: none;
@@ -44,6 +47,11 @@ h3 {
 	font-weight: lighter;
 	font-size: 14pt;
 	bookmark-level: none;
+}
+
+/* shim for weasyprint */
+td[align="right"], th[align="right"]{
+	text-align: right;
 }
 
 @page {
@@ -110,11 +118,169 @@ h3 {
 }
 
 p.footnote {
-	margin-top: 1em;
 	padding-top: 0.5em;
-	font-size: 7pt;
 	border-top: 0.5pt solid black;
+	margin-top: 1em;
 }
+
+p.footnote,
+p.footnote + p
+{
+	font-size: 7pt;
+}
+
+/* PAGES WHICH SHOULDN'T HAVE PAGE NUMBERS */
+
+section[data-page-number="i"],
+section[data-page-number="ii"],
+section[data-page-number="iii"],
+section[data-page-number="vi"],
+section[data-page-number="vii"],
+section[data-page-number="viii"],
+section[data-page-number="ix"],
+section[data-page-number="x"]
+{
+	page: blank;
+}
+
+/* PAGES WHICH SHOULDN'T HAVE A BOLD FIRST LETTER */
+
+section[data-page-number="iv"] h1 + p::first-letter,
+section[data-page-number="iv"] h2 + p::first-letter,
+section[data-page-number="v"] h1 + p::first-letter
+{
+	line-height: inherit;
+	font-size: inherit;
+	font-weight: inherit;
+}
+
+/* TITLE PAGE */
+
+section[data-page-number="iii"] p {
+	text-align: center;
+	font-size: 12pt;
+	margin-bottom: 10px;
+}
+
+section[data-page-number="iii"] p:first-child {
+	font-size: 40pt;
+	font-weight: bold;
+	margin-bottom: 15pt;
+	padding-bottom: 5pt;
+	border-bottom: 1pt solid black;
+}
+
+section[data-page-number="iii"] p:first-child em {
+	font-size: 20pt;
+	font-weight: normal;
+	display: block;
+}
+
+section[data-page-number="iii"] p:nth-child(4) {
+	margin-top: 125pt;
+}
+
+section[data-page-number="iii"] p:nth-child(5) {
+	padding-top: 10pt;
+	border-top: 1pt solid black;
+}
+
+section[data-page-number="iii"] p:nth-child(5),
+section[data-page-number="iii"] p:nth-child(8)
+{
+	font-size: 10.5pt;
+}
+
+section[data-page-number="iii"] p:nth-child(7)
+{
+	margin-bottom: 10pt;
+}
+
+section[data-page-number="iii"] p:nth-child(6),
+section[data-page-number="iii"] p:nth-child(9)
+{
+	font-size: 9pt;
+}
+
+section[data-page-number="iii"] p:nth-child(7),
+section[data-page-number="iii"] p:nth-child(10)
+{
+	font-size: 8pt;
+}
+
+section[data-page-number="iii"] p:nth-child(5),
+section[data-page-number="iii"] p:nth-child(6),
+section[data-page-number="iii"] p:nth-child(8),
+section[data-page-number="iii"] p:nth-child(9),
+section[data-page-number="iii"] p:nth-child(10)
+{
+	margin-bottom: 3pt;
+}
+
+/* COPYRIGHT PAGE */
+
+section[data-page-number="iv"] h1,
+section[data-page-number="iv"] h2,
+section[data-page-number="iv"] p
+{
+	text-align: center;
+}
+
+section[data-page-number="iv"] p {
+	margin-bottom: 10pt;
+	font-size: 10pt;
+}
+
+/* TABLE OF CONTENTS */
+
+section[data-page-number="v"] table {
+	hyphens: manual;
+	table-layout: fixed;
+	width: 100%
+}
+
+section[data-page-number="v"] th {
+	font-weight: normal;
+	font-style: italic;
+}
+
+section[data-page-number="v"] td
+{
+	font-family: "Nimbus Roman No9 SC", Times, serif;
+	font-variant: small-caps;
+}
+
+section[data-page-number="v"] th:first-child {
+	width: 4ch;
+}
+
+section[data-page-number="v"] th:last-child {
+	width: 7ch;
+}
+
+section[data-page-number="v"] td {
+	padding-top: 10pt;
+}
+
+section[data-page-number="v"] td:nth-child(1)
+{
+	padding-right: 5pt;
+}
+
+section[data-page-number="v"] tr:nth-child(1) td:nth-child(3),
+section[data-page-number="v"] tr:nth-child(2) td:nth-child(3),
+section[data-page-number="v"] tr:nth-child(3) td:nth-child(3),
+section[data-page-number="v"] tr:nth-child(4) td:nth-child(3),
+section[data-page-number="v"] tr:nth-child(5) td:nth-child(3),
+section[data-page-number="v"] tr:nth-child(6) td:nth-child(3)
+{
+	font-family: inherit;
+	font-size: 11pt;
+	vertical-align: bottom;
+}
+
+
+/* DOCTOR'S OPINION */
 
 section[data-page-number="xxv"] blockquote,
 section[data-page-number="xxvi"] blockquote,
@@ -158,3 +324,38 @@ section[data-page-number="xxxii"] blockquote p:last-child
 {
 	text-align: right;
 }
+
+/* HOW IT WORKS RESENTMENT TABLE */
+section[data-page-number="65"] table {
+	hyphens: manual;
+	font-size: 10pt;
+	table-layout: fixed;
+	width: 100%;
+	margin-top: 25pt;
+	margin-bottom: 25pt;
+}
+
+section[data-page-number="65"] table th {
+	font-weight: normal;
+	font-style: italic;
+}
+
+section[data-page-number="65"] table th:nth-child(1) {
+	width: 13ch;
+}
+
+section[data-page-number="65"] table th:nth-child(2) {
+	width: 22ch;
+}
+
+section[data-page-number="65"] table th:nth-child(3),
+section[data-page-number="65"] table td:nth-child(3)
+{
+	padding-left: 5pt;
+}
+
+section[data-page-number="65"] table td {
+	padding-top: 5pt;
+	vertical-align: top;
+}
+
