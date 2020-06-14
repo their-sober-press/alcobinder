@@ -23,6 +23,7 @@ h1 + p::first-letter, h2 + p::first-letter {
 	font-size: 1.5em;
 	font-weight: bold;
 }
+
 blockquote {
 	font-style: italic;
 }
@@ -161,7 +162,6 @@ section[data-page-number="v"] h1 + p::first-letter
 
 /* FIRST PAGE */
 
-
 section[data-page-number="i"] p {
 	text-align: center;
 	font-weight: bold;
@@ -282,7 +282,7 @@ section[data-page-number="v"] th:last-child {
 }
 
 section[data-page-number="v"] td {
-	padding-top: 10pt;
+	padding-top: 7pt;
 }
 
 section[data-page-number="v"] td:nth-child(1)
@@ -295,7 +295,8 @@ section[data-page-number="v"] tr:nth-child(2) td:nth-child(3),
 section[data-page-number="v"] tr:nth-child(3) td:nth-child(3),
 section[data-page-number="v"] tr:nth-child(4) td:nth-child(3),
 section[data-page-number="v"] tr:nth-child(5) td:nth-child(3),
-section[data-page-number="v"] tr:nth-child(6) td:nth-child(3)
+section[data-page-number="v"] tr:nth-child(6) td:nth-child(3),
+section[data-page-number="v"] tr:nth-child(7) td:nth-child(3)
 {
 	font-family: inherit;
 	font-size: 11pt;
@@ -309,7 +310,30 @@ section[data-page-number="vi"] h2 {
 	string-set: initial;
 }
 
+/* FORWARD TO THE FIRST AND SECOND EDITION */
 
+section[data-page-number="xiii"] p:first-of-type,
+section[data-page-number="xv"] p:first-of-type {
+	text-align: center;
+	margin: auto;
+	width: 80%;
+	margin-bottom: 10pt;
+}
+
+section[data-page-number="xiii"] p:nth-of-type(1)::first-letter,
+section[data-page-number="xv"] p:nth-of-type(1)::first-letter {
+	line-height: inherit;
+	font-size: inherit;
+	font-weight: inherit;
+}
+
+
+section[data-page-number="xiii"] p:nth-of-type(2)::first-letter,
+section[data-page-number="xv"] p:nth-of-type(2)::first-letter {
+	line-height: 1;
+	font-size: 1.5em;
+	font-weight: bold;
+}
 
 /* DOCTOR'S OPINION */
 
