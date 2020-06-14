@@ -62,7 +62,6 @@ td[align="right"], th[align="right"]{
 	margin-bottom: 0.5in;
 	@top-center {
 		text-transform: uppercase;	
-		content: string(chapterTitle);
 		margin-top: 22pt;
 		font-size: 0.6em;
 		letter-spacing: 0.25em;
@@ -104,10 +103,18 @@ td[align="right"], th[align="right"]{
 	@top-left {
 		content: string(pageNumber);
 	}
+
+	@top-center {
+		content: "Alcoholics Anonymous";
+	}
 }
 @page :right {
 	@top-right {
 		content: string(pageNumber);
+	}
+
+	@top-center {
+		content: string(chapterTitle);
 	}
 }
 @page blank {
@@ -129,13 +136,11 @@ p.footnote + p
 	font-size: 7pt;
 }
 
-/* PAGES WHICH SHOULDN'T HAVE PAGE NUMBERS */
+/* PAGES WHICH SHOULD BE BLANK */
 
 section[data-page-number="i"],
 section[data-page-number="ii"],
 section[data-page-number="iii"],
-section[data-page-number="vi"],
-section[data-page-number="vii"],
 section[data-page-number="viii"],
 section[data-page-number="ix"],
 section[data-page-number="x"]
@@ -152,6 +157,24 @@ section[data-page-number="v"] h1 + p::first-letter
 	line-height: inherit;
 	font-size: inherit;
 	font-weight: inherit;
+}
+
+/* FIRST PAGE */
+
+
+section[data-page-number="i"] p {
+	text-align: center;
+	font-weight: bold;
+}
+
+section[data-page-number="i"] p:nth-child(1) {
+	margin-top: 2.5in;
+	font-size: 15pt;
+	letter-spacing: 1pt;
+}
+
+section[data-page-number="i"] p:nth-child(2) {
+	font-size: 12pt;
 }
 
 /* TITLE PAGE */
@@ -279,6 +302,14 @@ section[data-page-number="v"] tr:nth-child(6) td:nth-child(3)
 	vertical-align: bottom;
 }
 
+/* ABOUT THIS REMIX */
+
+section[data-page-number="vi"] h2 {
+	margin-top: 75pt;
+	string-set: initial;
+}
+
+
 
 /* DOCTOR'S OPINION */
 
@@ -326,6 +357,7 @@ section[data-page-number="xxxii"] blockquote p:last-child
 }
 
 /* HOW IT WORKS RESENTMENT TABLE */
+
 section[data-page-number="65"] table {
 	hyphens: manual;
 	font-size: 10pt;
