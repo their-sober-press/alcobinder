@@ -46,7 +46,7 @@ func renderHTML(md string) string {
 	opts := htmlrenderer.RendererOptions{}
 	renderer := htmlrenderer.NewRenderer(opts)
 
-	extensions := parser.Attributes | parser.Tables //TODO: smart number start
+	extensions := parser.Attributes | parser.Tables | parser.OrderedListStart
 	parser := parser.NewWithExtensions(extensions)
 
 	html := markdown.ToHTML([]byte(markdownToRender), parser, renderer)

@@ -105,6 +105,18 @@ var _ = Describe("HtmlPageCombiner", func() {
 			})
 		})
 
+		Context("when there are lists that don't start with one", func() {
+			BeforeEach(func() {
+				pages = []Page{
+					paginator.NewPageFromMarkdown("1", customOrderedListStartMarkdown),
+				}
+			})
+			It("renders the table", func() {
+				//test
+				Expect(sections.First().Html()).To(Equal("<ol start=\"3\">\n<li>Third item</li>\n<li>Fourth item</li>\n</ol>\n"))
+			})
+		})
+
 	})
 })
 
@@ -112,4 +124,9 @@ const tableMarkdown = `
 | Header 1 | Header 2 |
 |----------|----------|
 | Cell 1   | Cell 2   |
+`
+
+const customOrderedListStartMarkdown = `
+3. Third item
+4. Fourth item
 `
