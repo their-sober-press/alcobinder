@@ -356,6 +356,21 @@ section[data-page-number="xxxii"] blockquote p:last-child
 	text-align: right;
 }
 
+/* HOW IT WORKS (a), (b), (c) LIST */
+
+section[data-page-number="60"] table {
+	margin: 15pt 0 15pt 3pt
+}
+
+section[data-page-number="60"] table, td {
+	vertical-align: top;
+	line-height: 1.3;
+}
+
+section[data-page-number="60"] table, td:nth-child(2) {
+	padding-left: 3pt;
+}
+
 /* HOW IT WORKS RESENTMENT TABLE */
 
 section[data-page-number="65"] table {
