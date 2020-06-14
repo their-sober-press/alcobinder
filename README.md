@@ -5,7 +5,7 @@ working draft.
 
 <img src=https://motevets.com/images/alcobinder.svg width="500" alt="alcobinder book press logo" title="book press"/>
 
-_Image credit: [Restoration Hardware: Cast Iron Book Press]_
+_Image credit: [Restoration Hardware, Cast Iron Book Press]_
 ## Getting started
 
 ### Prerequisites
@@ -63,8 +63,11 @@ natively implemented the CSS Paged Media working draft, which is why we need to 
 Using the `HTML_OUTPUT_FILE_PATH` from the previous step, you can write the final PDF to `PDF_OUTPUT_FILE_PATH` with
 
 ```bash
-weasyprint HTML_OUTPUT_FILE_PATH PDF_FILE_PATH
+weasyprint --presentational-hints HTML_OUTPUT_FILE_PATH PDF_FILE_PATH
 ```
+
+`--presentational-hints` or `-p` is needed to honour common HTML attributes like `<ol start="3">` or 
+`<td align="right">`.
 
 ## Future improvements
 There are a number of things we would like to do to improve alcobinder. If you're feeling generous, feel free to work
@@ -87,4 +90,4 @@ versions with minimal friction.
 [inclusive remix of the book Alcoholic Anonymous]: https://github.com/their-sober-press/inclusive-sober-literature/tree/master/remixed/big_book
 [a stylesheet for an inclusive remix of the 12&12]: https://github.com/their-sober-press/alcobinder/blob/master/css/12-and-12.css
 [Their Sober Press]: http://theirsober.press
-[Restoration Hardware: Cast Iron Book Press]: https://www.restorationhardware.com/catalog/product/product.jsp?productId=prod70012
+[Restoration Hardware, Cast Iron Book Press]: https://www.restorationhardware.com/catalog/product/product.jsp?productId=prod70012
