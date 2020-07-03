@@ -73,7 +73,7 @@ weasyprint --presentational-hints HTML_OUTPUT_FILE_PATH PDF_FILE_PATH
 There are a number of things we would like to do to improve alcobinder. If you're feeling generous, feel free to work
 on one and make a PR:
 * support books that are not pre-paged
-* give error/warning if a numbered page overflows into two pages (creating two pages with the name number)
+* give error/warning if a numbered page overflows into two pages (creating two pages with the same number)
 * create a docker container that packages alcobinder and WeasyPrint into the same image to have a one-stop-shop for
   generating markdown into a PDF
 * document libraries exported by alcobinder which others may find useful in other projects
