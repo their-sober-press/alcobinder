@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/their-sober-press/alcobinder/internal/app/alcobinder"
+	"github.com/their-sober-press/alcobinder/pkg/alcobinder"
 )
 
 func main() {

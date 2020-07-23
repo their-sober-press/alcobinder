@@ -8,7 +8,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	. "github.com/their-sober-press/alcobinder/internal/app/alcobinder"
+	. "github.com/their-sober-press/alcobinder/pkg/alcobinder"
 )
 
 var _ = Describe("BindMarkdownsToFile", func() {
@@ -16,9 +16,9 @@ var _ = Describe("BindMarkdownsToFile", func() {
 	var err error
 
 	BeforeEach(func() {
-		inputDirectory = "../../../test/data/single_markdown_file/"
-		inputCSSFile = "../../../test/data/test.css"
-		outputFile = fmt.Sprintf("../../../test/output/out%d.html", time.Now().UnixNano())
+		inputDirectory = "../../test/data/single_markdown_file/"
+		inputCSSFile = "../../test/data/test.css"
+		outputFile = fmt.Sprintf("../../test/output/out%d.html", time.Now().UnixNano())
 	})
 
 	JustBeforeEach(func() {
